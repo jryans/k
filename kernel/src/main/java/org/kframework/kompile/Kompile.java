@@ -18,6 +18,7 @@ import org.kframework.compile.checks.CheckHOLE;
 import org.kframework.compile.checks.CheckK;
 import org.kframework.compile.checks.CheckKLabels;
 import org.kframework.compile.checks.CheckLabels;
+import org.kframework.compile.checks.CheckNoRedeclaredSortPredicates;
 import org.kframework.compile.checks.CheckRHSVariables;
 import org.kframework.compile.checks.CheckRewrite;
 import org.kframework.compile.checks.CheckSortTopUniqueness;
@@ -476,6 +477,8 @@ public class Kompile {
         checkKLabels.check(mainModule);
 
         stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckLabels(errors)::check));
+
+        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckNoRedeclaredSortPredicates(errors)::check));
 
         if (!errors.isEmpty()) {
             kem.addAllKException(errors.stream().map(e -> e.exception).collect(Collectors.toList()));
